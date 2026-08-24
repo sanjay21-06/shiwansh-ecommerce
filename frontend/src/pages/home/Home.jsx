@@ -1,0 +1,142 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import CustomerNavbar from "../../components/layout/CustomerNavbar";
+import categoryService from "../../services/categoryService";
+
+function Home() {
+
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        let cancelled = false;
+
+        const fetchCategories = async () => {
+            try {
+                const response = await categoryService.getAll();
+
+                const activeCategories = response.data.filter(
+                    (category) => category.active === true
+                );
+
+                if (!cancelled) {
+                    setCategories(activeCategories);
+                }
+
+            } catch (error) {
+                console.error("Failed to load categories:", error);
+
+            } finally {
+                if (!cancelled) {
+                    setLoading(false);
+                }
+            }
+        };
+
+        fetchCategories();
+
+        return () => {
+            cancelled = true;
+        };
+    }, []);
+
+    return (
+        <div className="home-page">
+
+            <CustomerNavbar />
+
+            {/* HERO */}
+            <section className="hero-section">
+
+                <div className="hero-content">
+
+                    <p className="hero-subtitle">
+                        WELCOME TO SHIWANSH SHOP
+                    </p>
+
+                    <h1>
+                        Everything You Need,
+                        <br />
+                        All in One Place.
+                    </h1>
+
+                    <p className="hero-description">
+                        Discover quality products at great prices.
+                        Shop easily and enjoy a simple shopping experience.
+                    </p>
+
+                    <Link to="/products">
+                        <button className="shop-now-button">
+                            Shop Now
+                        </button>
+                    </Link>
+
+                </div>
+
+            </section>
+
+            {/* CATEGORIES */}
+            <section className="categories-section">
+
+                <div className="section-heading">
+
+                    <p>EXPLORE</p>
+
+                    <h2>
+                        Shop by Category
+                    </h2>
+
+                </div>
+
+                {loading ? (
+
+                    <p className="category-loading">
+                        Loading categories...
+                    </p>
+
+                ) : categories.length === 0 ? (
+
+                    <p className="category-empty">
+                        No categories available.
+                    </p>
+
+                ) : (
+
+                    <div className="category-cards">
+
+                        {categories.map((category) => (
+
+                            <div
+                                className="category-card"
+                                key={category.id}
+                            >
+
+                                <h3>
+                                    {category.name}
+                                </h3>
+
+                                <p>
+                                    {category.description}
+                                </p>
+
+                                <Link
+                                    to={`/categories/${category.id}`}
+                                >
+                                    Explore
+                                </Link>
+
+                            </div>
+
+                        ))}
+
+                    </div>
+
+                )}
+
+            </section>
+
+        </div>
+    );
+}
+
+export default Home;
