@@ -4,7 +4,6 @@ import CustomerNavbar from "../../components/layout/CustomerNavbar";
 import categoryService from "../../services/categoryService";
 
 function Home() {
-
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -22,10 +21,8 @@ function Home() {
                 if (!cancelled) {
                     setCategories(activeCategories);
                 }
-
             } catch (error) {
                 console.error("Failed to load categories:", error);
-
             } finally {
                 if (!cancelled) {
                     setLoading(false);
@@ -45,7 +42,9 @@ function Home() {
 
             <CustomerNavbar />
 
-            {/* HERO */}
+            {/* =========================
+                HERO SECTION
+            ========================= */}
             <section className="hero-section">
 
                 <div className="hero-content">
@@ -65,17 +64,105 @@ function Home() {
                         Shop easily and enjoy a simple shopping experience.
                     </p>
 
-                    <Link to="/products">
-                        <button className="shop-now-button">
-                            Shop Now
-                        </button>
-                    </Link>
+                    <div className="hero-actions">
+
+                        <Link to="/products">
+                            <button className="shop-now-button">
+                                Shop Now
+                            </button>
+                        </Link>
+
+                        <Link to="/login">
+                            <button className="user-login-button">
+                                User Login
+                            </button>
+                        </Link>
+
+                    </div>
 
                 </div>
 
             </section>
 
-            {/* CATEGORIES */}
+
+            {/* =========================
+                LOGIN OPTIONS
+            ========================= */}
+            <section className="login-options-section">
+
+                <div className="section-heading">
+
+                    <p>GET STARTED</p>
+
+                    <h2>
+                        Choose Your Login
+                    </h2>
+
+                    <span>
+                        Continue as a customer or manage the store as an administrator.
+                    </span>
+
+                </div>
+
+                <div className="login-options">
+
+                    {/* USER LOGIN */}
+                    <div className="login-card user-login-card">
+
+                        <div className="login-card-icon">
+                            🛍️
+                        </div>
+
+                        <h3>
+                            Customer Login
+                        </h3>
+
+                        <p>
+                            Sign in to your account to browse products,
+                            manage your cart and place orders.
+                        </p>
+
+                        <Link to="/login">
+                            <button className="login-card-button">
+                                Login as User
+                            </button>
+                        </Link>
+
+                    </div>
+
+
+                    {/* ADMIN LOGIN */}
+                    <div className="login-card admin-login-card">
+
+                        <div className="login-card-icon">
+                            🔐
+                        </div>
+
+                        <h3>
+                            Admin Login
+                        </h3>
+
+                        <p>
+                            Access the administration dashboard to manage
+                            products, categories and store operations.
+                        </p>
+
+                        <Link to="/admin/login">
+                            <button className="login-card-button">
+                                Login as Admin
+                            </button>
+                        </Link>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            {/* =========================
+                CATEGORIES
+            ========================= */}
             <section className="categories-section">
 
                 <div className="section-heading">

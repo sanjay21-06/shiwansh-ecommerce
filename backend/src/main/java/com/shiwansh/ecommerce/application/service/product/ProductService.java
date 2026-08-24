@@ -25,6 +25,9 @@ public class ProductService implements
         UpdateProductUseCase,
         DeleteProductUseCase {
 
+
+
+
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
@@ -123,6 +126,34 @@ public class ProductService implements
         product.setActive(false);
 
         productRepository.save(product);
+    }
+
+
+    public List<ProductResponse> getActiveProducts() {
+
+        return productRepository.findAll()
+                .stream()
+                .filter(Product::isActive)
+                .map(this::toResponse)
+                .toList();
+    }
+
+
+    public ProductResponse getActiveProductById(Long id) {
+
+        Product product = productRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Product not found with id: " + id
+                        ));
+
+        if (!product.isActive()) {
+            throw new ResourceNotFoundException(
+                    "Product is currently unavailable"
+            );
+        }
+
+        return toResponse(product);
     }
 
     private ProductResponse toResponse(Product product) {

@@ -105,6 +105,7 @@ public class ProductRepositoryAdapter implements ProductRepository {
                     categoryEntity.getId(),
                     categoryEntity.getName(),
                     categoryEntity.getDescription(),
+                    categoryEntity.getImageUrl(),
                     categoryEntity.isActive()
             );
         }

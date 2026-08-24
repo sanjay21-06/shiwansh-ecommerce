@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Modal from "../../components/common/Modal";
 
-function Login() {
+function AdminLogin() {
     const navigate = useNavigate();
 
     const [isLoginOpen, setIsLoginOpen] = useState(true);
@@ -13,46 +13,46 @@ function Login() {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        console.log("User Email:", email);
-        console.log("User Password:", password);
+        console.log("Admin Email:", email);
+        console.log("Admin Password:", password);
 
         // Backend authentication will be connected later.
 
         // Temporary navigation for testing.
-        navigate("/products");
+        navigate("/admin");
     };
 
     return (
         <div className="login-page">
 
             {/* =========================
-                LOGIN PAGE CONTENT
+                ADMIN LOGIN CONTENT
             ========================= */}
             <div className="login-page-content">
 
                 <h1>
-                    Welcome to Shiwansh
+                    Shiwansh Admin
                 </h1>
 
                 <p>
-                    Customer Login
+                    Administration Portal
                 </p>
 
                 <button
                     className="login-button"
                     onClick={() => setIsLoginOpen(true)}
                 >
-                    User Login
+                    Admin Login
                 </button>
 
                 <div className="login-navigation">
 
                     <p>
-                        Are you an administrator?
+                        Are you a customer?
                     </p>
 
-                    <Link to="/admin/login">
-                        Admin Login
+                    <Link to="/login">
+                        User Login
                     </Link>
 
                 </div>
@@ -61,7 +61,7 @@ function Login() {
 
 
             {/* =========================
-                USER LOGIN MODAL
+                ADMIN LOGIN MODAL
             ========================= */}
             <Modal
                 isOpen={isLoginOpen}
@@ -71,11 +71,11 @@ function Login() {
                 <div className="login-form">
 
                     <h2>
-                        User Login
+                        Admin Login
                     </h2>
 
                     <p className="login-subtitle">
-                        Sign in to your account to continue shopping.
+                        Sign in to manage the Shiwansh store.
                     </p>
 
 
@@ -84,14 +84,14 @@ function Login() {
                         {/* EMAIL */}
                         <div className="form-group">
 
-                            <label htmlFor="email">
-                                Email
+                            <label htmlFor="admin-email">
+                                Admin Email
                             </label>
 
                             <input
-                                id="email"
+                                id="admin-email"
                                 type="email"
-                                placeholder="Enter your email"
+                                placeholder="Enter admin email"
                                 value={email}
                                 onChange={(event) =>
                                     setEmail(event.target.value)
@@ -105,14 +105,14 @@ function Login() {
                         {/* PASSWORD */}
                         <div className="form-group">
 
-                            <label htmlFor="password">
+                            <label htmlFor="admin-password">
                                 Password
                             </label>
 
                             <input
-                                id="password"
+                                id="admin-password"
                                 type="password"
-                                placeholder="Enter your password"
+                                placeholder="Enter admin password"
                                 value={password}
                                 onChange={(event) =>
                                     setPassword(event.target.value)
@@ -128,24 +128,10 @@ function Login() {
                             type="submit"
                             className="login-submit"
                         >
-                            Login
+                            Login as Admin
                         </button>
 
                     </form>
-
-
-                    {/* REGISTER */}
-                    <div className="login-register">
-
-                        <p>
-                            Don't have an account?
-                        </p>
-
-                        <Link to="/register">
-                            Create Account
-                        </Link>
-
-                    </div>
 
                 </div>
 
@@ -155,4 +141,4 @@ function Login() {
     );
 }
 
-export default Login;
+export default AdminLogin;

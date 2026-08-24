@@ -8,10 +8,10 @@ import com.shiwansh.ecommerce.application.usecase.category.DeleteCategoryUseCase
 import com.shiwansh.ecommerce.application.usecase.category.GetCategoriesUseCase;
 import com.shiwansh.ecommerce.application.usecase.category.GetCategoryUseCase;
 import com.shiwansh.ecommerce.application.usecase.category.UpdateCategoryUseCase;
+import com.shiwansh.ecommerce.common.exception.ResourceNotFoundException;
 import com.shiwansh.ecommerce.domain.model.Category;
 import com.shiwansh.ecommerce.domain.repository.CategoryRepository;
-import org.springframework.stereotype.Service;import com.shiwansh.ecommerce.common.exception.ResourceNotFoundException;
-
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -25,23 +25,35 @@ public class CategoryService implements
 
     private final CategoryRepository categoryRepository;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(
+            CategoryRepository categoryRepository) {
+
         this.categoryRepository = categoryRepository;
     }
 
+    // ==========================================
+    // CREATE
+    // ==========================================
+
     @Override
-    public CategoryResponse create(CategoryCreateRequest request) {
+    public CategoryResponse create(
+            CategoryCreateRequest request) {
 
         Category category = new Category();
 
         category.setName(request.getName());
         category.setDescription(request.getDescription());
-        category.setActive(request.isActive());
+        category.setImageUrl(request.getImageUrl());
 
-        Category savedCategory = categoryRepository.save(category);
+        Category savedCategory =
+                categoryRepository.save(category);
 
         return toResponse(savedCategory);
     }
+
+    // ==========================================
+    // GET ALL
+    // ==========================================
 
     @Override
     public List<CategoryResponse> getAll() {
@@ -52,59 +64,81 @@ public class CategoryService implements
                 .toList();
     }
 
+    // ==========================================
+    // GET BY ID
+    // ==========================================
+
     @Override
     public CategoryResponse getById(Long id) {
 
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Category not found with id: " + id
-                        ));
+        Category category =
+                categoryRepository.findById(id)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Category not found with id: "
+                                                + id
+                                ));
 
         return toResponse(category);
     }
+
+    // ==========================================
+    // UPDATE
+    // ==========================================
 
     @Override
     public CategoryResponse update(
             Long id,
             CategoryUpdateRequest request) {
 
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Category not found with id: " + id
-                        ));
+        Category category =
+                categoryRepository.findById(id)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Category not found with id: "
+                                                + id
+                                ));
 
         category.setName(request.getName());
         category.setDescription(request.getDescription());
-        category.setActive(request.isActive());
+        category.setImageUrl(request.getImageUrl());
 
-        Category updatedCategory = categoryRepository.save(category);
+        Category updatedCategory =
+                categoryRepository.save(category);
 
         return toResponse(updatedCategory);
     }
 
+    // ==========================================
+    // DELETE
+    // ==========================================
+
     @Override
     public void delete(Long id) {
 
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Category not found with id: " + id
-                        )
-                );
+        Category category =
+                categoryRepository.findById(id)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Category not found with id: "
+                                                + id
+                                ));
 
-        category.setActive(false);
-
-        categoryRepository.save(category);
+        categoryRepository.delete(category);
     }
 
-    private CategoryResponse toResponse(Category category) {
+    // ==========================================
+    // DTO CONVERSION
+    // ==========================================
+
+    private CategoryResponse toResponse(
+            Category category) {
 
         return new CategoryResponse(
                 category.getId(),
                 category.getName(),
                 category.getDescription(),
+                category.getImageUrl(),
                 category.isActive()
         );
     }

@@ -3,16 +3,20 @@ package com.shiwansh.ecommerce.presentation.controller;
 import com.shiwansh.ecommerce.application.dto.category.CategoryCreateRequest;
 import com.shiwansh.ecommerce.application.dto.category.CategoryResponse;
 import com.shiwansh.ecommerce.application.dto.category.CategoryUpdateRequest;
+
 import com.shiwansh.ecommerce.application.usecase.category.CreateCategoryUseCase;
 import com.shiwansh.ecommerce.application.usecase.category.DeleteCategoryUseCase;
 import com.shiwansh.ecommerce.application.usecase.category.GetCategoriesUseCase;
 import com.shiwansh.ecommerce.application.usecase.category.GetCategoryUseCase;
 import com.shiwansh.ecommerce.application.usecase.category.UpdateCategoryUseCase;
+
+import com.shiwansh.ecommerce.common.response.ApiResponse;
+
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;
-import com.shiwansh.ecommerce.common.response.ApiResponse;
 
 import java.util.List;
 
@@ -40,6 +44,11 @@ public class AdminCategoryController {
         this.deleteCategoryUseCase = deleteCategoryUseCase;
     }
 
+    // ==========================================
+    // CREATE CATEGORY
+    // POST /api/admin/categories
+    // ==========================================
+
     @PostMapping
     public ResponseEntity<ApiResponse<CategoryResponse>> create(
             @Valid @RequestBody CategoryCreateRequest request) {
@@ -49,11 +58,18 @@ public class AdminCategoryController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(ApiResponse.success(
-                        "Category created successfully",
-                        response
-                ));
+                .body(
+                        ApiResponse.success(
+                                "Category created successfully",
+                                response
+                        )
+                );
     }
+
+    // ==========================================
+    // GET ALL CATEGORIES
+    // GET /api/admin/categories
+    // ==========================================
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<CategoryResponse>>> getAll() {
@@ -65,6 +81,11 @@ public class AdminCategoryController {
                 )
         );
     }
+
+    // ==========================================
+    // GET CATEGORY BY ID
+    // GET /api/admin/categories/{id}
+    // ==========================================
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<CategoryResponse>> getById(
@@ -78,6 +99,11 @@ public class AdminCategoryController {
         );
     }
 
+    // ==========================================
+    // UPDATE CATEGORY
+    // PUT /api/admin/categories/{id}
+    // ==========================================
+
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<CategoryResponse>> update(
             @PathVariable Long id,
@@ -90,6 +116,11 @@ public class AdminCategoryController {
                 )
         );
     }
+
+    // ==========================================
+    // DELETE CATEGORY
+    // DELETE /api/admin/categories/{id}
+    // ==========================================
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(

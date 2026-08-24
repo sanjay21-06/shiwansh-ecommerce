@@ -20,41 +20,6 @@ public class UserRepositoryAdapter implements UserRepository {
     @Override
     public User save(User user) {
 
-        UserEntity entity = toEntity(user);
-
-        UserEntity savedEntity = userJpaRepository.save(entity);
-
-        return toDomain(savedEntity);
-    }
-
-    @Override
-    public Optional<User> findById(Long id) {
-
-        return userJpaRepository.findById(id)
-                .map(this::toDomain);
-    }
-
-    @Override
-    public Optional<User> findByEmail(String email) {
-
-        return userJpaRepository.findByEmail(email)
-                .map(this::toDomain);
-    }
-
-    @Override
-    public boolean existsByEmail(String email) {
-
-        return userJpaRepository.existsByEmail(email);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-
-        userJpaRepository.deleteById(id);
-    }
-
-    private UserEntity toEntity(User user) {
-
         UserEntity entity = new UserEntity();
 
         entity.setId(user.getId());
@@ -64,18 +29,53 @@ public class UserRepositoryAdapter implements UserRepository {
         entity.setRole(user.getRole());
         entity.setActive(user.isActive());
 
-        return entity;
-    }
-
-    private User toDomain(UserEntity entity) {
+        UserEntity saved = userJpaRepository.save(entity);
 
         return new User(
-                entity.getId(),
-                entity.getName(),
-                entity.getEmail(),
-                entity.getPassword(),
-                entity.getRole(),
-                entity.isActive()
+                saved.getId(),
+                saved.getName(),
+                saved.getEmail(),
+                saved.getPassword(),
+                saved.getRole(),
+                saved.isActive()
         );
+    }
+
+    @Override
+    public Optional<User> findById(Long id) {
+
+        return userJpaRepository.findById(id)
+                .map(entity -> new User(
+                        entity.getId(),
+                        entity.getName(),
+                        entity.getEmail(),
+                        entity.getPassword(),
+                        entity.getRole(),
+                        entity.isActive()
+                ));
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+
+        return userJpaRepository.findByEmail(email)
+                .map(entity -> new User(
+                        entity.getId(),
+                        entity.getName(),
+                        entity.getEmail(),
+                        entity.getPassword(),
+                        entity.getRole(),
+                        entity.isActive()
+                ));
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return userJpaRepository.existsByEmail(email);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        userJpaRepository.deleteById(id);
     }
 }

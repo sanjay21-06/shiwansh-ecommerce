@@ -10,60 +10,129 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class CategoryRepositoryAdapter implements CategoryRepository {
+public class CategoryRepositoryAdapter
+        implements CategoryRepository {
 
     private final CategoryJpaRepository categoryJpaRepository;
 
-    public CategoryRepositoryAdapter(CategoryJpaRepository categoryJpaRepository) {
-        this.categoryJpaRepository = categoryJpaRepository;
+
+    public CategoryRepositoryAdapter(
+            CategoryJpaRepository categoryJpaRepository) {
+
+        this.categoryJpaRepository =
+                categoryJpaRepository;
     }
+
+
+    // ==============================
+    // SAVE
+    // ==============================
 
     @Override
     public Category save(Category category) {
-        CategoryEntity entity = toEntity(category);
 
-        CategoryEntity savedEntity = categoryJpaRepository.save(entity);
+        CategoryEntity entity =
+                toEntity(category);
+
+        CategoryEntity savedEntity =
+                categoryJpaRepository.save(entity);
 
         return toDomain(savedEntity);
     }
 
+
+    // ==============================
+    // FIND BY ID
+    // ==============================
+
     @Override
     public Optional<Category> findById(Long id) {
-        return categoryJpaRepository.findById(id)
+
+        return categoryJpaRepository
+                .findById(id)
                 .map(this::toDomain);
     }
 
+
+    // ==============================
+    // FIND ALL
+    // ==============================
+
     @Override
     public List<Category> findAll() {
-        return categoryJpaRepository.findAll()
+
+        return categoryJpaRepository
+                .findAll()
                 .stream()
                 .map(this::toDomain)
                 .toList();
     }
 
+
+    // ==============================
+    // DELETE
+    // ==============================
+
+    @Override
+    public void delete(Category category) {
+
+        categoryJpaRepository.deleteById(
+                category.getId()
+        );
+    }
+
+
     @Override
     public void deleteById(Long id) {
+
         categoryJpaRepository.deleteById(id);
     }
 
-    private CategoryEntity toEntity(Category category) {
 
-        CategoryEntity entity = new CategoryEntity();
+    // ==============================
+    // DOMAIN → ENTITY
+    // ==============================
+
+    private CategoryEntity toEntity(
+            Category category) {
+
+        CategoryEntity entity =
+                new CategoryEntity();
 
         entity.setId(category.getId());
-        entity.setName(category.getName());
-        entity.setDescription(category.getDescription());
-        entity.setActive(category.isActive());
+
+        entity.setName(
+                category.getName()
+        );
+
+        entity.setDescription(
+                category.getDescription()
+        );
+
+        entity.setImageUrl(
+                category.getImageUrl()
+        );
+
+        entity.setActive(
+                category.isActive()
+        );
 
         return entity;
     }
 
-    private Category toDomain(CategoryEntity entity) {
+
+    // ==============================
+    // ENTITY → DOMAIN
+    // ==============================
+
+    private Category toDomain(
+            CategoryEntity entity) {
 
         return new Category(
                 entity.getId(),
                 entity.getName(),
                 entity.getDescription(),
+                entity.getImageUrl(),
                 entity.isActive()
         );
     }

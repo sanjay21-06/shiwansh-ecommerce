@@ -1,38 +1,67 @@
-import api from "./api";
+import axios from "axios";
+
+
+const API_URL = "http://localhost:8080/api/products";
+
 
 const productService = {
-    getAll: async () => {
-        const response = await api.get("/admin/products");
+
+    // ==========================================
+    // GET ALL ACTIVE PRODUCTS
+    // ==========================================
+
+    getActiveProducts: async () => {
+
+        const response =
+            await axios.get(API_URL);
+
         return response.data;
     },
+
+
+    // ==========================================
+    // GET ACTIVE PRODUCT BY ID
+    // ==========================================
+
+    getActiveProductById: async (id) => {
+
+        const response =
+            await axios.get(
+                `${API_URL}/${id}`
+            );
+
+        return response.data;
+    },
+
+
+    // ==========================================
+    // GET ALL PRODUCTS
+    // ==========================================
+
+    getAll: async () => {
+
+        const response =
+            await axios.get(API_URL);
+
+        return response.data;
+    },
+
+
+    // ==========================================
+    // GET PRODUCT BY ID
+    // ==========================================
 
     getById: async (id) => {
-        const response = await api.get(`/admin/products/${id}`);
-        return response.data;
-    },
 
-    create: async (product) => {
-        const response = await api.post(
-            "/admin/products",
-            product
-        );
-        return response.data;
-    },
+        const response =
+            await axios.get(
+                `${API_URL}/${id}`
+            );
 
-    update: async (id, product) => {
-        const response = await api.put(
-            `/admin/products/${id}`,
-            product
-        );
         return response.data;
-    },
+    }
 
-    delete: async (id) => {
-        const response = await api.delete(
-            `/admin/products/${id}`
-        );
-        return response.data;
-    },
 };
+
 
 export default productService;

@@ -19,22 +19,13 @@ function ProductDetails() {
             setLoading(true);
             setError("");
 
-            const response = await productService.getAll();
+            const response =
+                await productService.getActiveProduct(id);
 
-            const productData = Array.isArray(response)
-                ? response
-                : response?.data || [];
+            const productData =
+                response?.data || response;
 
-            const foundProduct = productData.find(
-                (item) => String(item.id) === String(id)
-            );
-
-            if (!foundProduct) {
-                setError("Product not found.");
-                return;
-            }
-
-            setProduct(foundProduct);
+            setProduct(productData);
 
         } catch (error) {
 
@@ -44,7 +35,7 @@ function ProductDetails() {
             );
 
             setError(
-                "Unable to load product. Please try again."
+                "Product not found or unavailable."
             );
 
         } finally {
@@ -77,74 +68,78 @@ function ProductDetails() {
                     </div>
                 )}
 
-                {!loading && !error && product && (
+                {!loading &&
+                    !error &&
+                    product && (
 
-                    <div className="product-details-card">
+                        <div className="product-details-card">
 
-                        <div className="product-details-content">
+                            <div className="product-details-content">
 
-                            <p className="product-label">
-                                PRODUCT
-                            </p>
+                                <p className="product-label">
+                                    PRODUCT
+                                </p>
 
-                            <span className="product-category">
-                                {product.categoryName ||
-                                    product.category?.name ||
-                                    product.category ||
-                                    "General"}
-                            </span>
+                                <span className="product-category">
+                                    {product.categoryName ||
+                                        product.category?.name ||
+                                        product.category ||
+                                        "General"}
+                                </span>
 
-                            <h1>
-                                {product.name}
-                            </h1>
+                                <h1>
+                                    {product.name}
+                                </h1>
 
-                            <p className="product-details-description">
-                                {product.description ||
-                                    "Discover this product from our store."}
-                            </p>
+                                <p className="product-details-description">
+                                    {product.description ||
+                                        "Discover this product from our store."}
+                                </p>
 
-                            <strong className="product-details-price">
-                                ₹
-                                {Number(
-                                    product.price || 0
-                                ).toLocaleString("en-IN", {
-                                    minimumFractionDigits: 0,
-                                    maximumFractionDigits: 2
-                                })}
-                            </strong>
+                                <strong className="product-details-price">
+                                    ₹
+                                    {Number(
+                                        product.price || 0
+                                    ).toLocaleString(
+                                        "en-IN",
+                                        {
+                                            minimumFractionDigits: 0,
+                                            maximumFractionDigits: 2
+                                        }
+                                    )}
+                                </strong>
 
-                            <div className="product-details-actions">
+                                <div className="product-details-actions">
 
-                                <button
-                                    type="button"
-                                    className="back-products-button"
-                                    onClick={() =>
-                                        navigate("/products")
-                                    }
-                                >
-                                    ← Back to Products
-                                </button>
+                                    <button
+                                        type="button"
+                                        className="back-products-button"
+                                        onClick={() =>
+                                            navigate("/products")
+                                        }
+                                    >
+                                        ← Back to Products
+                                    </button>
 
-                                <button
-                                    type="button"
-                                    className="add-cart-button"
-                                    onClick={() =>
-                                        console.log(
-                                            "Add to cart:",
-                                            product
-                                        )
-                                    }
-                                >
-                                    Add to Cart
-                                </button>
+                                    <button
+                                        type="button"
+                                        className="add-cart-button"
+                                        onClick={() =>
+                                            console.log(
+                                                "Add to cart:",
+                                                product
+                                            )
+                                        }
+                                    >
+                                        Add to Cart
+                                    </button>
+
+                                </div>
 
                             </div>
 
                         </div>
-
-                    </div>
-
-                )}
+                    )}
 
             </section>
 

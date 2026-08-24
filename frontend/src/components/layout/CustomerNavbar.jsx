@@ -1,14 +1,20 @@
 import { Link } from "react-router-dom";
 
 function CustomerNavbar() {
+
     return (
         <nav className="customer-navbar">
+
+            {/* LOGO */}
 
             <div className="customer-logo">
                 <Link to="/">
                     SHIWANSH
                 </Link>
             </div>
+
+
+            {/* NAVIGATION */}
 
             <div className="customer-nav-links">
 
@@ -25,7 +31,15 @@ function CustomerNavbar() {
                 </Link>
 
                 <Link to="/login">
-                    Login
+                    Customer Login
+                </Link>
+
+                <Link to="/register">
+                    Register
+                </Link>
+
+                <Link to="/admin/login">
+                    Admin Login
                 </Link>
 
             </div>

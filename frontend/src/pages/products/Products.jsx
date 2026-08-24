@@ -11,7 +11,6 @@ function Products() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-
     const fetchProducts = async () => {
 
         try {
@@ -19,32 +18,31 @@ function Products() {
             setLoading(true);
             setError("");
 
-            const response = await productService.getAll();
+            const response =
+                await productService.getActiveProducts();
 
             /*
-             * Backend response can be:
-             * { data: [...] }
-             * or directly [...]
+             * ApiResponse:
+             *
+             * {
+             *   success: true,
+             *   message: "...",
+             *   data: [...]
+             * }
              */
+
             const productData = Array.isArray(response)
                 ? response
                 : response?.data || [];
 
-            /*
-             * Customer should only see active products.
-             */
-            const activeProducts = productData.filter(
-                (product) =>
-                    product.active === true ||
-                    product.status === "ACTIVE" ||
-                    product.status === "Active"
-            );
-
-            setProducts(activeProducts);
+            setProducts(productData);
 
         } catch (error) {
 
-            console.error("Failed to load products:", error);
+            console.error(
+                "Failed to load products:",
+                error
+            );
 
             setError(
                 "Unable to load products. Please try again."
@@ -105,77 +103,88 @@ function Products() {
                 )}
 
 
-                {!loading && !error && products.length === 0 && (
-                    <div className="category-empty">
-                        No products available at the moment.
-                    </div>
-                )}
+                {!loading &&
+                    !error &&
+                    products.length === 0 && (
+
+                        <div className="category-empty">
+                            No products available at the moment.
+                        </div>
+                    )}
 
 
-                {!loading && !error && products.length > 0 && (
+                {!loading &&
+                    !error &&
+                    products.length > 0 && (
 
-                    <div className="products-grid">
+                        <div className="products-grid">
 
-                        {products.map((product) => (
+                            {products.map((product) => (
 
-                            <div
-                                className="product-card"
-                                key={product.id}
-                            >
+                                <div
+                                    className="product-card"
+                                    key={product.id}
+                                >
 
-                                <div className="product-card-content">
+                                    <div className="product-card-content">
 
-                                    <p className="product-label">
-                                        Product
-                                    </p>
+                                        <p className="product-label">
+                                            Product
+                                        </p>
 
-                                    <span className="product-category">
-                                        {product.categoryName ||
-                                            product.category?.name ||
-                                            product.category ||
-                                            "General"}
-                                    </span>
+                                        <span className="product-category">
+                                            {product.categoryName ||
+                                                product.category?.name ||
+                                                product.category ||
+                                                "General"}
+                                        </span>
 
-                                    <h2>
-                                        {product.name}
-                                    </h2>
+                                        <h2>
+                                            {product.name}
+                                        </h2>
 
-                                    <p className="product-description">
-                                        {product.description ||
-                                            "Discover this product from our store."}
-                                    </p>
+                                        <p className="product-description">
+                                            {product.description ||
+                                                "Discover this product from our store."}
+                                        </p>
 
-                                    <div className="product-bottom">
+                                        <div className="product-bottom">
 
-                                        <strong>
-                                            ₹
-                                            {Number(
-                                                product.price || 0
-                                            ).toLocaleString("en-IN", {
-                                                minimumFractionDigits: 0,
-                                                maximumFractionDigits: 2
-                                            })}
-                                        </strong>
+                                            <strong>
+                                                ₹
+                                                {Number(
+                                                    product.price || 0
+                                                ).toLocaleString(
+                                                    "en-IN",
+                                                    {
+                                                        minimumFractionDigits: 0,
+                                                        maximumFractionDigits: 2
+                                                    }
+                                                )}
+                                            </strong>
 
-                                        <button
-                                            type="button"
-                                            className="view-product-button"
-                                            onClick={() => navigate(`/products/${product.id}`)}
-                                        >
-                                            View Product
-                                        </button>
+                                            <button
+                                                type="button"
+                                                className="view-product-button"
+                                                onClick={() =>
+                                                    navigate(
+                                                        `/products/${product.id}`
+                                                    )
+                                                }
+                                            >
+                                                View Product
+                                            </button>
+
+                                        </div>
 
                                     </div>
 
                                 </div>
 
-                            </div>
+                            ))}
 
-                        ))}
-
-                    </div>
-
-                )}
+                        </div>
+                    )}
 
             </section>
 
